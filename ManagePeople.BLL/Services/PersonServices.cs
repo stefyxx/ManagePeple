@@ -1,11 +1,11 @@
 ﻿using ManagePeople.BLL.Interfaces;
-using ManagePeople.Domains;
+using ManagePeople.Domain;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Transactions;
 
 namespace ManagePeople.BLL.Services
 {
@@ -13,74 +13,63 @@ namespace ManagePeople.BLL.Services
     {
         public IEnumerable<Person> GetAll()
         {
-
-            //TODO
-            //piu' appelli a db --> si? using TransactionScope scope = new TransactionScope(); --> scope.Complete();
-            //1: Filter
-            return _personRepository.GetAll(); 
+            return _personRepository.GetAll();
         }
 
         public IEnumerable<Person> Search(string? lastName, string? firstName)
         {
-            return _personRepository.Search(lastName, firstName); 
-        }
-        public Person? Find(Guid id)
-        {
-            try
-            {
-                Person? personFound = _personRepository.GetById(id);
-                if (personFound == null) throw new Exception($"No person for this id:  {id} ");
-                else return personFound;
-            }
-            catch (Exception)
-            {
-                throw new Exception($"No person for this id:  {id} ");
-            }
-        }
-        public Person? Register(Person p)
-        {
-            try
-            {
-                //DONE: firstNamer e/o lastName != "" (vide)
-                if (p.FirstName == "") throw new Exception("The first name cannot be empty");
-                if (p.LastName == "") throw new Exception("The last name cannot be empty");
-                Person newPerson = _personRepository.Add(new Person()
-                {
-                    Id = new Guid(),
-                    FirstName = p.FirstName, 
-                    LastName = p.LastName
-                });
-                return newPerson;
+            //DONE:
+            //Filters must be case insensitive  --> SQL is not case sensitive
+            //if (lastName != null) lastName.ToLower();
+            //firstName = (firstName !=null)? firstName.ToLower() : null;
 
-            }
-            catch (Exception)
+            return _personRepository.Search(lastName, firstName);
+    
+        }
+
+        public Person? Get(Guid id)
+        {
+            return _personRepository.GetById(id);
+        }
+
+        public Person Register(Person person)
+        {
+            Guid id = Guid.NewGuid();
+            person.Id = id;
+            if (person.LastName == "" || person.LastName == null) throw new Exception("The last name is required");
+            if (person.FirstName == "" || person.FirstName == null) throw new Exception("The first name is required");
+            else
             {
-                throw new Exception("It was not possible to register");
+                //I would like to do a little check: for example
+                //a person wants to register but is already registered in DB 
+                //this is not possible, because the way 'Person' was created, I could have two homonyms
+                return _personRepository.Add(person);
             }
         }
 
-        public Person Update(Person p)
+        public Person Update(Guid id,  string? lastName, string? firstName)
         {
-            return _personRepository.Update(p);
+            // hard to imagine other controls, since 'person' has too few properties and I might have homonyms
+
+            Person? found = _personRepository.GetById(id);
+            if (found == null) throw new InvalidOperationException($"No person for thid id '{id}'");
+            else
+            {
+                found.LastName = (lastName != null) ? lastName : found.LastName;
+                found.FirstName = (firstName != null) ? firstName : found.FirstName;
+                return _personRepository.Update(found);
+            }
+            
         }
 
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
-            //TODO: 
-            // a riflettere cancello ricevendo un Id
-            //o cancello avendo una Person p?
-            _personRepository.Delete(id);
+            Person? deleted = _personRepository.GetById(id);
+            if (deleted != null)
+            {
+                _personRepository.Delete(deleted);
+            }
+            else throw new Exception($"No person with this id '{id}'");
         }
-
-        public void Remove(Person p)
-        {
-            using TransactionScope scope = new TransactionScope();
-
-            Person? person = _personRepository.GetById(p.Id);
-            _personRepository.Remove(p);
-            scope.Complete();
-        }
-
-
     }
 }

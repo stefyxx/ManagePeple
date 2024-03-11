@@ -5,7 +5,7 @@ using ManagePeople.DAL.Context;
 using ManagePeople.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace ManagePeple
+namespace ManagePeople.API
 {
     public class Program
     {
@@ -13,18 +13,16 @@ namespace ManagePeple
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            //Cela me permet de créer une DB nommée 'ManagePeople.DB' en utilisant EF en fonction de mon DbContext 'ManagePeopleContext'
-            builder.Services.AddDbContext<ManagePeopleContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("Default") ?? throw new InvalidOperationException("Connection string 'Default' not found.")));
-
             // Add services to the container.
-            builder.Services.AddScoped<IPersonRepository, PersonRepository>();
-            builder.Services.AddScoped<PersonServices>();
-
 
             builder.Services.AddControllers();
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContext<ManagePeopleContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+            builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+            builder.Services.AddScoped<PersonServices>();
 
             var app = builder.Build();
 

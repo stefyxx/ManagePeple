@@ -1,4 +1,4 @@
-namespace ManagePeple
+namespace ManagePeople.API
 {
     public class WeatherForecast
     {

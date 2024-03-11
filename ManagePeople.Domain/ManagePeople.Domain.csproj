@@ -15,9 +15,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ManagePeople.BLL\ManagePeople.BLL.csproj" />
-    <ProjectReference Include="..\ManagePeople.Domain\ManagePeople.Domain.csproj" />
-  </ItemGroup>
-
 </Project>

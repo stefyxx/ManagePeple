@@ -1,4 +1,4 @@
-﻿using ManagePeople.Domains;
+﻿using ManagePeople.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +15,6 @@ namespace ManagePeople.BLL.Interfaces
         Person? GetById(Guid id);
         Person Add(Person person);
         Person Update(Person person);
-
-        //TODO: delete a riflettere
-        void Remove(Person p);
-        void Delete(int id);
-
+        void Delete(Person person);
     }
 }

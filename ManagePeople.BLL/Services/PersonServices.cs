@@ -55,8 +55,8 @@ namespace ManagePeople.BLL.Services
             if (found == null) throw new InvalidOperationException($"No person for thid id '{id}'");
             else
             {
-                found.LastName = (lastName != null) ? lastName : found.LastName;
-                found.FirstName = (firstName != null) ? firstName : found.FirstName;
+                found.LastName = (lastName == null || lastName =="") ?  found.LastName : lastName;
+                found.FirstName = (firstName == null || lastName == "") ?  found.FirstName : firstName;
                 return _personRepository.Update(found);
             }
             

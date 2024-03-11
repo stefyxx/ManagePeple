@@ -77,7 +77,7 @@ namespace ManagePeople.API.Controllers
         {
             try
             {
-                Person? updated = _personServices.Update(id, value.lastName, value.lastName);
+                Person? updated = _personServices.Update(id, value.lastName, value.firstName);
                 if(updated == null) return NotFound();
                 return Ok(updated);
             }

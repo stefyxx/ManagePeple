@@ -28,10 +28,13 @@ namespace ManagePeople.DAL.Repositories
             //cela signifie qu'il acceptera tous les noms / prénoms dans la table DB
 
             //2) StartsWith et EndsWith --> j'ai ajouté en plus Trim pour effacer les espaces vides au début et a la fin de la string
-            return _context.Set<Person>()
-                .Where(p => lastName == null || p.LastName.StartsWith(lastName.Trim()) || p.LastName.EndsWith(lastName.Trim()))
-                .Where(p => firstName == null || p.FirstName.StartsWith(firstName.Trim()) || p.FirstName.EndsWith(firstName.Trim()))
+            IEnumerable<Person> p = _context.Set<Person>()
+                .Where(p => lastName == null || p.LastName.StartsWith(lastName.Trim()))
+                //|| p.LastName.EndsWith(lastName.Trim()))
+                .Where(p => firstName == null || p.FirstName.StartsWith(firstName.Trim()))
+                //|| p.FirstName.EndsWith(firstName.Trim()))
                 .OrderBy(p => p.LastName);
+            return p;
         }
         public Person? GetById(Guid id)
         {

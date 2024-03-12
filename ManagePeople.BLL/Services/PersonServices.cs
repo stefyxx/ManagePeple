@@ -36,6 +36,8 @@ namespace ManagePeople.BLL.Services
         {
             Guid id = Guid.NewGuid();
             person.Id = id;
+
+            //Not only have I created an specified Type ('CreatePersonDTO'), but I want to make sure that my properties are well filled
             if (person.LastName == "" || person.LastName == null) throw new Exception("The last name is required");
             if (person.FirstName == "" || person.FirstName == null) throw new Exception("The first name is required");
             else
@@ -52,9 +54,11 @@ namespace ManagePeople.BLL.Services
             // hard to imagine other controls, since 'person' has too few properties and I might have homonyms
 
             Person? found = _personRepository.GetById(id);
-            if (found == null) throw new InvalidOperationException($"No person for thid id '{id}'");
+            //If --> NotFound
+            if (found == null) throw new InvalidOperationException($"No person for this id '{id}'");
             else
             {
+                //I imagined that you could change or just the first name or just the last name or both
                 found.LastName = (lastName == null || lastName =="") ?  found.LastName : lastName;
                 found.FirstName = (firstName == null || lastName == "") ?  found.FirstName : firstName;
                 return _personRepository.Update(found);
@@ -68,8 +72,13 @@ namespace ManagePeople.BLL.Services
             if (deleted != null)
             {
                 _personRepository.Delete(deleted);
+
+                //I test that is really deleted:
+                Person? reallyDeleted = _personRepository.GetById(id);
+                if(reallyDeleted != null) throw new Exception("Deleted doesn't work!");
+
             }
-            else throw new Exception($"No person with this id '{id}'");
+            else throw new KeyNotFoundException($"No person with this id '{id}'");
         }
     }
 }

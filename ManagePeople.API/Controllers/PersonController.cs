@@ -43,13 +43,15 @@ namespace ManagePeople.API.Controllers
         }
 
         // GET api/<PersonController>/5
-        [HttpGet("{id}")]
-        public IActionResult Get(Guid id)
+        //The method actepts only 'id' that is type Guid
+        [HttpGet("{id:guid}")]
+        public IActionResult Get([FromRoute]Guid id)
         {
             try
             {
                 Person? person = _personServices.Get(id);
-                if(person == null) return NotFound();
+                //The method returns a 'NotFoundResult object' if the it cannot find an entity with this Id in the DB.
+                if (person == null) return NotFound();
                 return Ok(person);
             }
             catch (KeyNotFoundException ex)
@@ -59,9 +61,9 @@ namespace ManagePeople.API.Controllers
            
         }
 
-        // POST api/<PersonController>
+        // Add a person:
         [HttpPost]
-        public IActionResult Post([FromBody] PersonDTO dto)
+        public IActionResult Post([FromBody] CreatePersonDTO dto)
         {
             try
             {
@@ -72,8 +74,8 @@ namespace ManagePeople.API.Controllers
         }
 
         // PUT api/<PersonController>/5
-        [HttpPut("{id}")]
-        public IActionResult Put(Guid id, [FromBody] PersonDTO value)
+        [HttpPut("{id:guid}")]
+        public IActionResult Put([FromRoute]Guid id, [FromBody] PersonDTO value)
         {
             try
             {

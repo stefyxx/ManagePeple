@@ -5,7 +5,7 @@ namespace ManagePeople.API
 {
     public static class Mappers
     {
-        public static Person ToDAL(this PersonDTO p)
+        public static Person ToDAL(this CreatePersonDTO p)
         {
             return new Person()
             {

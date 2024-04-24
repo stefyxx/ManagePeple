@@ -1,4 +1,4 @@
-_Test For IONIX_ : Web service REST/Json permettant de gérer des personnes dans un DB
+_Test For EONIX_ : Web service REST/Json, allowing you to manage people in a DB
 
 ## Choices
 

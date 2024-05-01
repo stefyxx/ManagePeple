@@ -29,9 +29,9 @@ namespace ManagePeople.DAL.Repositories
 
             //2) StartsWith et EndsWith --> j'ai ajouté en plus Trim pour effacer les espaces vides au début et a la fin de la string
             IEnumerable<Person> p = _context.Set<Person>()
-                .Where(p => lastName == null || p.LastName.StartsWith(lastName.Trim()))
+                .Where(p => lastName == null || p.LastName.StartsWith(lastName.Trim()) || p.LastName.EndsWith(lastName.Trim()))
                 //|| p.LastName.EndsWith(lastName.Trim()))
-                .Where(p => firstName == null || p.FirstName.StartsWith(firstName.Trim()))
+                .Where(p => firstName == null || p.FirstName.StartsWith(firstName.Trim()) || p.FirstName.EndsWith(firstName.Trim()))
                 //|| p.FirstName.EndsWith(firstName.Trim()))
                 .OrderBy(p => p.LastName);
             return p;

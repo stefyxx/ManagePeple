@@ -16,5 +16,8 @@ namespace ManagePeople.BLL.Interfaces
         Person Add(Person person);
         Person Update(Person person);
         void Delete(Person person);
+
+        IEnumerable<FirstName> GetAllFirstName();
+
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,6 +18,16 @@ namespace ManagePeople.DAL.Repositories
             return _context.Set<Person>().ToList();
         }
 
+        public IEnumerable<FirstName> GetAllFirstName()
+        {
+            return _context.Set<Person>()
+                .Select(p => new FirstName()
+                {
+                    Id = p.Id,
+                    First = p.FirstName,
+                })
+                .ToList();
+        }
         public IEnumerable<Person> Search(string? lastName, string? firstName)
         {
             //DONE:
@@ -28,11 +39,13 @@ namespace ManagePeople.DAL.Repositories
             //cela signifie qu'il acceptera tous les noms / prénoms dans la table DB
 
             //2) StartsWith et EndsWith --> j'ai ajouté en plus Trim pour effacer les espaces vides au début et a la fin de la string
+            // Contains() --> pour chercher pour syllabe (LIKE into DB query)
+
             IEnumerable<Person> p = _context.Set<Person>()
-                .Where(p => lastName == null || p.LastName.StartsWith(lastName.Trim()) || p.LastName.EndsWith(lastName.Trim()))
-                //|| p.LastName.EndsWith(lastName.Trim()))
-                .Where(p => firstName == null || p.FirstName.StartsWith(firstName.Trim()) || p.FirstName.EndsWith(firstName.Trim()))
-                //|| p.FirstName.EndsWith(firstName.Trim()))
+                .Where(p => lastName == null || p.LastName.StartsWith(lastName.Trim()) || p.LastName.EndsWith(lastName.Trim()) || p.LastName.Contains(lastName.Trim()))
+
+                .Where(p => firstName == null || p.FirstName.StartsWith(firstName.Trim()) || p.FirstName.EndsWith(firstName.Trim()) || p.FirstName.Contains(firstName.Trim()))
+
                 .OrderBy(p => p.LastName);
             return p;
         }

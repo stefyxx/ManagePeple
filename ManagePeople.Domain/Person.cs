@@ -9,5 +9,8 @@ namespace ManagePeople.Domain
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
 
+        // V. DAL --> configuration
+        //public DateTime DateNaissance { get; set; } = DateTime.Now;
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using ManagePeople.Domain;
+﻿using ManagePeople.DAL.Configuration;
+using ManagePeople.Domain;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -26,8 +27,10 @@ namespace ManagePeople.DAL.Context
         //Seeders
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Person>().HasData(DataSeeders.InitPeople());
+            //If you want to configure your table into DB:
+            //modelBuilder.ApplyConfiguration(new PersonConfiguration());
 
+            modelBuilder.Entity<Person>().HasData(DataSeeders.InitPeople());
         }
     }
 }

@@ -24,6 +24,12 @@ namespace ManagePeople.API
             builder.Services.AddScoped<IPersonRepository, PersonRepository>();
             builder.Services.AddScoped<PersonServices>();
 
+            //builder.Services.AddCors(b => b.AddDefaultPolicy(o =>
+            //o.AllowAnyHeader()
+            //.AllowAnyOrigin()
+            //.AllowAnyMethod()
+            //));
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -35,8 +41,25 @@ namespace ManagePeople.API
 
             app.UseHttpsRedirection();
 
+            //app.UseCors();
+
             app.UseAuthorization();
 
+            
+
+            //app.Use(async (context, next) =>
+            //{
+            //    try
+            //    {
+            //        await next();
+            //    }
+            //    catch(ArgumentException ex)
+            //    {
+            //        context.Response.StatusCode = 400;
+            //        context.Response.ContentType = "application/json";
+            //        await context.Response.WriteAsync(JsonConvert.SerializeObject(new { Error = ex.Message }));
+            //    }
+            //});
 
             app.MapControllers();
 
